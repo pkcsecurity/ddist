@@ -21,7 +21,7 @@
 (defn calc-dist[m1 m2]
   (let [inner-product (compute-inner m1 m2)
         denom (Math/sqrt (* (compute-inner m2 m2) (compute-inner m1 m1)))]
-    (println (Math/acos (/ inner-product denom)))))
+    (Math/acos (/ inner-product denom))))
 
 (defn dist [a b]
   (let [dict-a (word-cnt-reduce (clojure.string/split a #" "))
