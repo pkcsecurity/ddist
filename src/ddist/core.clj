@@ -1,18 +1,19 @@
 (ns ddist.core
-  (:gen-class))
+  (:gen-class)
+  (:require [clojure.set :as s]))
 
 ;; Takes [m] map and [s] string 
 ;; Returns [m] with [s] as key and frequency of [s] as the value 
-(defn word-freq [m v]
-    (update m v (fnil inc 0)))
+(defn word-freq [m s]
+  (update m s (fnil inc 0)))
 
 (defn word-cnt-reduce [v]
   (reduce word-freq {} v))
 
-;; Multiplies the union of the keys of two maps, then sum the results
+;; Multiplies the intersection of the keys of two maps, then sum the results
 (defn compute-inner [m1 m2]
-  (let [kys (keys (select-keys m1 (keys m2)))]
-    (reduce + (map #(* (get m1 %) (get m2 %)) kys))))
+  (let [kys (s/intersection (set (keys m1)) (set (keys m2)))]
+    (reduce #(+ %1 (* (get m1 %2) (get m2 %2))) 0 kys)))
 
 ;; Perfomes document distance calculation
 (defn calc-dist[m1 m2]
